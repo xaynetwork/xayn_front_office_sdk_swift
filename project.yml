@@ -1,13 +1,13 @@
-name: OpenAPIClient
+name: XaynFrontOfficeSdk
 targets:
-  OpenAPIClient:
+  XaynFrontOfficeSdk:
     type: framework
     platform: iOS
     deploymentTarget: "9.0"
-    sources: [OpenAPIClient]
+    sources: [XaynFrontOfficeSdk]
     info:
       path: ./Info.plist
-      version: 1.0.12
+      version: 1.0.13
     settings:
       APPLICATION_EXTENSION_API_ONLY: true
     scheme: {}
