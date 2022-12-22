@@ -13,7 +13,7 @@ import AnyCodable
 open class FrontOfficeAPI {
 
     /**
-     Get personalized documents for the user
+     Gets personalized documents for the user.
      
      - parameter userId: (path) Id of the user 
      - parameter count: (query) Maximum number of personalized documents to return (optional, default to 10)
@@ -33,9 +33,9 @@ open class FrontOfficeAPI {
     }
 
     /**
-     Get personalized documents for the user
+     Gets personalized documents for the user.
      - GET /users/{user_id}/personalized_documents
-     - Returns a list of documents personalized for the given `user_id`. Each document contains the id, the score and the properties that are attached to the document. The score is a value between 0 and 1 where a higher value means that the document matches the preferences of the user better.
+     - Returns a list of documents personalized for the given `user_id`. Each document contains the id, the score and the properties that are attached to the document. The score is a value between 0 and 1 where a higher value means that the document matches the preferences of the user better. Note that you can request personalized documents for a specific `user_id`, only after that same `user_id` has made at least one interaction via our system.
      - API Key:
        - type: apiKey authorizationToken 
        - name: ApiKeyAuth
@@ -68,7 +68,7 @@ open class FrontOfficeAPI {
     }
 
     /**
-     Add interaction between a user and a document
+     Adds an interaction between the user and the document.
      
      - parameter userId: (path) Id of the user 
      - parameter userInteractionRequest: (body)  
@@ -88,9 +88,9 @@ open class FrontOfficeAPI {
     }
 
     /**
-     Add interaction between a user and a document
+     Adds an interaction between the user and the document.
      - PATCH /users/{user_id}/interactions
-     - The interaction is used to provide personalized documents to the user.
+     - Use this method to register an interaction between a user and a document. Currently, we only support a `Positive` interaction, which is equivalent to a user who \"likes\" a certain document. For web sites, consider triggering this method whenever a certain document url loads, preferably after the user spent some time on the page, in order to prevent false positives. For apps, consider implementing a \"like\" button, where the on click then triggers this method.
      - API Key:
        - type: apiKey authorizationToken 
        - name: ApiKeyAuth
