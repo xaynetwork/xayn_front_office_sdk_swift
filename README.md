@@ -88,8 +88,8 @@ FrontOfficeAPI.updateUserInteractions(
         UserInteractionData(id: documentId, type: UserInteractionType.positive)
     ])
 ) { response, error in
-    guard error == nil else {
-        printError(error)
+    if let error = error else {
+        print("\(error)")
         
         return
     }
@@ -108,8 +108,8 @@ The count parameter is optional, it defaults to 10 if not specified.
 let user = $USER
 
 FrontOfficeAPI.getPersonalizedDocuments(userId: user) { response, error in
-    guard error == nil else {
-        printError(error)
+    if let error = error else {
+        print("\(error)")
         
         return
     }
