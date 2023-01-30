@@ -17,12 +17,13 @@ open class FrontOfficeAPI {
      
      - parameter userId: (path) Id of the user 
      - parameter count: (query) Maximum number of personalized documents to return (optional, default to 10)
+     - parameter publishedAfter: (query) Only include documents which have been published after given datetime.  If used documents without a &#x60;properties.publication_date&#x60; will be ignored. (optional)
      - parameter apiResponseQueue: The queue on which api response is dispatched.
      - parameter completion: completion handler to receive the data and the error objects
      */
     @discardableResult
-    open class func getPersonalizedDocuments(userId: String, count: Int? = nil, apiResponseQueue: DispatchQueue = XaynFrontOfficeSdkAPI.apiResponseQueue, completion: @escaping ((_ data: PersonalizedDocumentsResponse?, _ error: Error?) -> Void)) -> RequestTask {
-        return getPersonalizedDocumentsWithRequestBuilder(userId: userId, count: count).execute(apiResponseQueue) { result in
+    open class func getPersonalizedDocuments(userId: String, count: Int? = nil, publishedAfter: Date? = nil, apiResponseQueue: DispatchQueue = XaynFrontOfficeSdkAPI.apiResponseQueue, completion: @escaping ((_ data: PersonalizedDocumentsResponse?, _ error: Error?) -> Void)) -> RequestTask {
+        return getPersonalizedDocumentsWithRequestBuilder(userId: userId, count: count, publishedAfter: publishedAfter).execute(apiResponseQueue) { result in
             switch result {
             case let .success(response):
                 completion(response.body, nil)
@@ -41,13 +42,70 @@ open class FrontOfficeAPI {
        - name: ApiKeyAuth
      - parameter userId: (path) Id of the user 
      - parameter count: (query) Maximum number of personalized documents to return (optional, default to 10)
+     - parameter publishedAfter: (query) Only include documents which have been published after given datetime.  If used documents without a &#x60;properties.publication_date&#x60; will be ignored. (optional)
      - returns: RequestBuilder<PersonalizedDocumentsResponse> 
      */
-    open class func getPersonalizedDocumentsWithRequestBuilder(userId: String, count: Int? = nil) -> RequestBuilder<PersonalizedDocumentsResponse> {
+    open class func getPersonalizedDocumentsWithRequestBuilder(userId: String, count: Int? = nil, publishedAfter: Date? = nil) -> RequestBuilder<PersonalizedDocumentsResponse> {
         var localVariablePath = "/users/{user_id}/personalized_documents"
         let userIdPreEscape = "\(APIHelper.mapValueToPathItem(userId))"
         let userIdPostEscape = userIdPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
         localVariablePath = localVariablePath.replacingOccurrences(of: "{user_id}", with: userIdPostEscape, options: .literal, range: nil)
+        let localVariableURLString = XaynFrontOfficeSdkAPI.basePath + localVariablePath
+        let localVariableParameters: [String: Any]? = nil
+
+        var localVariableUrlComponents = URLComponents(string: localVariableURLString)
+        localVariableUrlComponents?.queryItems = APIHelper.mapValuesToQueryItems([
+            "count": (wrappedValue: count?.encodeToJSON(), isExplode: true),
+            "published_after": (wrappedValue: publishedAfter?.encodeToJSON(), isExplode: true),
+        ])
+
+        let localVariableNillableHeaders: [String: Any?] = [
+            :
+        ]
+
+        let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
+
+        let localVariableRequestBuilder: RequestBuilder<PersonalizedDocumentsResponse>.Type = XaynFrontOfficeSdkAPI.requestBuilderFactory.getBuilder()
+
+        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true)
+    }
+
+    /**
+     Returns documents similar to the given document.
+     
+     - parameter documentId: (path) Id of the document 
+     - parameter count: (query) Maximum number of semantic similar documents to return (optional, default to 10)
+     - parameter apiResponseQueue: The queue on which api response is dispatched.
+     - parameter completion: completion handler to receive the data and the error objects
+     */
+    @discardableResult
+    open class func getSimilarDocuments(documentId: String, count: Int? = nil, apiResponseQueue: DispatchQueue = XaynFrontOfficeSdkAPI.apiResponseQueue, completion: @escaping ((_ data: SemanticSearchResponse?, _ error: Error?) -> Void)) -> RequestTask {
+        return getSimilarDocumentsWithRequestBuilder(documentId: documentId, count: count).execute(apiResponseQueue) { result in
+            switch result {
+            case let .success(response):
+                completion(response.body, nil)
+            case let .failure(error):
+                completion(nil, error)
+            }
+        }
+    }
+
+    /**
+     Returns documents similar to the given document.
+     - GET /semantic_search/{document_id}
+     - Returns a list of documents that are semantically similar to the one given as input. Each document contains the id, the score and the properties. The score is a value between 0 and 1 where a higher value means that the document is more similar to the one in input
+     - API Key:
+       - type: apiKey authorizationToken 
+       - name: ApiKeyAuth
+     - parameter documentId: (path) Id of the document 
+     - parameter count: (query) Maximum number of semantic similar documents to return (optional, default to 10)
+     - returns: RequestBuilder<SemanticSearchResponse> 
+     */
+    open class func getSimilarDocumentsWithRequestBuilder(documentId: String, count: Int? = nil) -> RequestBuilder<SemanticSearchResponse> {
+        var localVariablePath = "/semantic_search/{document_id}"
+        let documentIdPreEscape = "\(APIHelper.mapValueToPathItem(documentId))"
+        let documentIdPostEscape = documentIdPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
+        localVariablePath = localVariablePath.replacingOccurrences(of: "{document_id}", with: documentIdPostEscape, options: .literal, range: nil)
         let localVariableURLString = XaynFrontOfficeSdkAPI.basePath + localVariablePath
         let localVariableParameters: [String: Any]? = nil
 
@@ -62,7 +120,7 @@ open class FrontOfficeAPI {
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
-        let localVariableRequestBuilder: RequestBuilder<PersonalizedDocumentsResponse>.Type = XaynFrontOfficeSdkAPI.requestBuilderFactory.getBuilder()
+        let localVariableRequestBuilder: RequestBuilder<SemanticSearchResponse>.Type = XaynFrontOfficeSdkAPI.requestBuilderFactory.getBuilder()
 
         return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true)
     }

@@ -14,11 +14,13 @@ XaynFrontOfficeSdk/Classes/OpenAPIs/Extensions.swift
 XaynFrontOfficeSdk/Classes/OpenAPIs/JSONDataEncoding.swift
 XaynFrontOfficeSdk/Classes/OpenAPIs/JSONEncodingHelper.swift
 XaynFrontOfficeSdk/Classes/OpenAPIs/Models.swift
+XaynFrontOfficeSdk/Classes/OpenAPIs/Models/DocumentProperties.swift
 XaynFrontOfficeSdk/Classes/OpenAPIs/Models/GenericError.swift
 XaynFrontOfficeSdk/Classes/OpenAPIs/Models/PersonalizedDocumentData.swift
 XaynFrontOfficeSdk/Classes/OpenAPIs/Models/PersonalizedDocumentsError.swift
 XaynFrontOfficeSdk/Classes/OpenAPIs/Models/PersonalizedDocumentsErrorAllOf.swift
 XaynFrontOfficeSdk/Classes/OpenAPIs/Models/PersonalizedDocumentsResponse.swift
+XaynFrontOfficeSdk/Classes/OpenAPIs/Models/SemanticSearchResponse.swift
 XaynFrontOfficeSdk/Classes/OpenAPIs/Models/UserInteractionData.swift
 XaynFrontOfficeSdk/Classes/OpenAPIs/Models/UserInteractionError.swift
 XaynFrontOfficeSdk/Classes/OpenAPIs/Models/UserInteractionErrorAllOf.swift

@@ -25,8 +25,8 @@ class FrontOfficeTests: XCTestCase {
         assert(endpoint != nil, "Missing ENDPOINT in env")
         assert(token != nil, "Missing TOKEN_USERS in env")
         
-        XaynFrontOfficeSdk.basePath = endpoint!
-        XaynFrontOfficeSdk.customHeaders["authorizationToken"] = token!
+        XaynFrontOfficeSdkAPI.basePath = endpoint!
+        XaynFrontOfficeSdkAPI.customHeaders["authorizationToken"] = token!
     }
     
     override func tearDown() {

@@ -15,10 +15,9 @@ public struct PersonalizedDocumentData: Codable, JSONEncodable, Hashable {
     /** An id can be any non-empty string that consist of digits, latin letters, underscores, colons, minus signs, at signs, and dots. */
     public var id: String
     public var score: Double
-    /** Arbitrary properties that can be attached to a document. A key must be a valid `DocumentPropertyId`. */
-    public var properties: [String: AnyCodable]?
+    public var properties: DocumentProperties?
 
-    public init(id: String, score: Double, properties: [String: AnyCodable]? = nil) {
+    public init(id: String, score: Double, properties: DocumentProperties? = nil) {
         self.id = id
         self.score = score
         self.properties = properties
