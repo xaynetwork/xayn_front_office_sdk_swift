@@ -7,7 +7,7 @@ targets:
     sources: [XaynFrontOfficeSdk]
     info:
       path: ./Info.plist
-      version: 1.0.20
+      version: 1.20.1
     settings:
       APPLICATION_EXTENSION_API_ONLY: true
     scheme: {}
