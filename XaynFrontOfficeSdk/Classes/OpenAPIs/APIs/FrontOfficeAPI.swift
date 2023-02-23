@@ -76,12 +76,13 @@ open class FrontOfficeAPI {
      - parameter documentId: (path) Id of the document 
      - parameter count: (query) Maximum number of semantic similar documents to return (optional, default to 10)
      - parameter minSimilarity: (query) Minimum similarity a document has to have to be included. (optional, default to 0)
+     - parameter personalizeFor: (query) A user for whom the documents will be personalized for. If that user doesn&#39;t have enough interactions in the system, then the documents are returned unpersonalized. (optional)
      - parameter apiResponseQueue: The queue on which api response is dispatched.
      - parameter completion: completion handler to receive the data and the error objects
      */
     @discardableResult
-    open class func getSimilarDocuments(documentId: String, count: Int? = nil, minSimilarity: Float? = nil, apiResponseQueue: DispatchQueue = XaynFrontOfficeSdkAPI.apiResponseQueue, completion: @escaping ((_ data: SemanticSearchResponse?, _ error: Error?) -> Void)) -> RequestTask {
-        return getSimilarDocumentsWithRequestBuilder(documentId: documentId, count: count, minSimilarity: minSimilarity).execute(apiResponseQueue) { result in
+    open class func getSimilarDocuments(documentId: String, count: Int? = nil, minSimilarity: Float? = nil, personalizeFor: String? = nil, apiResponseQueue: DispatchQueue = XaynFrontOfficeSdkAPI.apiResponseQueue, completion: @escaping ((_ data: SemanticSearchResponse?, _ error: Error?) -> Void)) -> RequestTask {
+        return getSimilarDocumentsWithRequestBuilder(documentId: documentId, count: count, minSimilarity: minSimilarity, personalizeFor: personalizeFor).execute(apiResponseQueue) { result in
             switch result {
             case let .success(response):
                 completion(response.body, nil)
@@ -101,9 +102,10 @@ open class FrontOfficeAPI {
      - parameter documentId: (path) Id of the document 
      - parameter count: (query) Maximum number of semantic similar documents to return (optional, default to 10)
      - parameter minSimilarity: (query) Minimum similarity a document has to have to be included. (optional, default to 0)
+     - parameter personalizeFor: (query) A user for whom the documents will be personalized for. If that user doesn&#39;t have enough interactions in the system, then the documents are returned unpersonalized. (optional)
      - returns: RequestBuilder<SemanticSearchResponse> 
      */
-    open class func getSimilarDocumentsWithRequestBuilder(documentId: String, count: Int? = nil, minSimilarity: Float? = nil) -> RequestBuilder<SemanticSearchResponse> {
+    open class func getSimilarDocumentsWithRequestBuilder(documentId: String, count: Int? = nil, minSimilarity: Float? = nil, personalizeFor: String? = nil) -> RequestBuilder<SemanticSearchResponse> {
         var localVariablePath = "/semantic_search/{document_id}"
         let documentIdPreEscape = "\(APIHelper.mapValueToPathItem(documentId))"
         let documentIdPostEscape = documentIdPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
@@ -115,6 +117,7 @@ open class FrontOfficeAPI {
         localVariableUrlComponents?.queryItems = APIHelper.mapValuesToQueryItems([
             "count": (wrappedValue: count?.encodeToJSON(), isExplode: true),
             "min_similarity": (wrappedValue: minSimilarity?.encodeToJSON(), isExplode: true),
+            "personalize_for": (wrappedValue: personalizeFor?.encodeToJSON(), isExplode: true),
         ])
 
         let localVariableNillableHeaders: [String: Any?] = [
