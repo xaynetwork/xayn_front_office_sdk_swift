@@ -17,10 +17,15 @@ XaynFrontOfficeSdk/Classes/OpenAPIs/Models.swift
 XaynFrontOfficeSdk/Classes/OpenAPIs/Models/DocumentProperties.swift
 XaynFrontOfficeSdk/Classes/OpenAPIs/Models/GenericError.swift
 XaynFrontOfficeSdk/Classes/OpenAPIs/Models/HistoryEntry.swift
+XaynFrontOfficeSdk/Classes/OpenAPIs/Models/InputUser.swift
+XaynFrontOfficeSdk/Classes/OpenAPIs/Models/InputUserById.swift
+XaynFrontOfficeSdk/Classes/OpenAPIs/Models/InputUserWithHistory.swift
 XaynFrontOfficeSdk/Classes/OpenAPIs/Models/PersonalizedDocumentData.swift
 XaynFrontOfficeSdk/Classes/OpenAPIs/Models/PersonalizedDocumentsError.swift
 XaynFrontOfficeSdk/Classes/OpenAPIs/Models/PersonalizedDocumentsErrorAllOf.swift
 XaynFrontOfficeSdk/Classes/OpenAPIs/Models/PersonalizedDocumentsResponse.swift
+XaynFrontOfficeSdk/Classes/OpenAPIs/Models/SemanticSearchRequest.swift
+XaynFrontOfficeSdk/Classes/OpenAPIs/Models/SemanticSearchRequestPersonalize.swift
 XaynFrontOfficeSdk/Classes/OpenAPIs/Models/SemanticSearchResponse.swift
 XaynFrontOfficeSdk/Classes/OpenAPIs/Models/StatelessPersonalizedDocumentsRequest.swift
 XaynFrontOfficeSdk/Classes/OpenAPIs/Models/StatelessPersonalizedDocumentsResponse.swift
@@ -32,5 +37,6 @@ XaynFrontOfficeSdk/Classes/OpenAPIs/Models/UserInteractionType.swift
 XaynFrontOfficeSdk/Classes/OpenAPIs/OpenISO8601DateFormatter.swift
 XaynFrontOfficeSdk/Classes/OpenAPIs/SynchronizedDictionary.swift
 XaynFrontOfficeSdk/Classes/OpenAPIs/URLSessionImplementations.swift
+XaynFrontOfficeSdk/Classes/OpenAPIs/Validation.swift
 git_push.sh
 project.yml

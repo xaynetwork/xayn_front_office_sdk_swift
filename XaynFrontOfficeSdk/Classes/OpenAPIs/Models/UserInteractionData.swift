@@ -12,6 +12,7 @@ import AnyCodable
 
 public struct UserInteractionData: Codable, JSONEncodable, Hashable {
 
+    static let idRule = StringRule(minLength: 1, maxLength: 256, pattern: "/^[a-zA-Z0-9_:@.\\-]+$/")
     /** An id can be any non-empty string that consist of digits, latin letters, underscores, colons, minus signs, at signs, and dots. */
     public var id: String?
     public var type: UserInteractionType?

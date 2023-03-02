@@ -38,7 +38,7 @@ open class FrontOfficeAPI {
      - GET /users/{user_id}/personalized_documents
      - Returns a list of documents personalized for the given `user_id`. Each document contains the id, the score and the properties that are attached to the document. The score is a value between 0 and 1 where a higher value means that the document matches the preferences of the user better. Documents that have been interacted with by the user are filtered out from the result. Note that you can request personalized documents for a specific `user_id`, only after that same `user_id` has made enough interactions via our system.
      - API Key:
-       - type: apiKey authorizationToken 
+       - type: apiKey authorizationToken (HEADER)
        - name: ApiKeyAuth
      - parameter userId: (path) Id of the user 
      - parameter count: (query) Maximum number of personalized documents to return (optional, default to 10)
@@ -73,16 +73,13 @@ open class FrontOfficeAPI {
     /**
      Returns documents similar to the given document.
      
-     - parameter documentId: (path) Id of the document 
-     - parameter count: (query) Maximum number of semantic similar documents to return (optional, default to 10)
-     - parameter minSimilarity: (query) Minimum similarity a document has to have to be included. (optional, default to 0)
-     - parameter personalizeFor: (query) A user for whom the documents will be personalized for. If that user doesn&#39;t have enough interactions in the system, then the documents are returned unpersonalized. (optional)
+     - parameter semanticSearchRequest: (body)  
      - parameter apiResponseQueue: The queue on which api response is dispatched.
      - parameter completion: completion handler to receive the data and the error objects
      */
     @discardableResult
-    open class func getSimilarDocuments(documentId: String, count: Int? = nil, minSimilarity: Float? = nil, personalizeFor: String? = nil, apiResponseQueue: DispatchQueue = XaynFrontOfficeSdkAPI.apiResponseQueue, completion: @escaping ((_ data: SemanticSearchResponse?, _ error: Error?) -> Void)) -> RequestTask {
-        return getSimilarDocumentsWithRequestBuilder(documentId: documentId, count: count, minSimilarity: minSimilarity, personalizeFor: personalizeFor).execute(apiResponseQueue) { result in
+    open class func getSimilarDocuments(semanticSearchRequest: SemanticSearchRequest, apiResponseQueue: DispatchQueue = XaynFrontOfficeSdkAPI.apiResponseQueue, completion: @escaping ((_ data: SemanticSearchResponse?, _ error: Error?) -> Void)) -> RequestTask {
+        return getSimilarDocumentsWithRequestBuilder(semanticSearchRequest: semanticSearchRequest).execute(apiResponseQueue) { result in
             switch result {
             case let .success(response):
                 completion(response.body, nil)
@@ -94,31 +91,20 @@ open class FrontOfficeAPI {
 
     /**
      Returns documents similar to the given document.
-     - GET /semantic_search/{document_id}
+     - POST /semantic_search
      - Returns a list of documents that are semantically similar to the one given as input. Each document contains the id, the score and the properties. The score is a value between 0 and 1 where a higher value means that the document is more similar to the one in input
      - API Key:
-       - type: apiKey authorizationToken 
+       - type: apiKey authorizationToken (HEADER)
        - name: ApiKeyAuth
-     - parameter documentId: (path) Id of the document 
-     - parameter count: (query) Maximum number of semantic similar documents to return (optional, default to 10)
-     - parameter minSimilarity: (query) Minimum similarity a document has to have to be included. (optional, default to 0)
-     - parameter personalizeFor: (query) A user for whom the documents will be personalized for. If that user doesn&#39;t have enough interactions in the system, then the documents are returned unpersonalized. (optional)
+     - parameter semanticSearchRequest: (body)  
      - returns: RequestBuilder<SemanticSearchResponse> 
      */
-    open class func getSimilarDocumentsWithRequestBuilder(documentId: String, count: Int? = nil, minSimilarity: Float? = nil, personalizeFor: String? = nil) -> RequestBuilder<SemanticSearchResponse> {
-        var localVariablePath = "/semantic_search/{document_id}"
-        let documentIdPreEscape = "\(APIHelper.mapValueToPathItem(documentId))"
-        let documentIdPostEscape = documentIdPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
-        localVariablePath = localVariablePath.replacingOccurrences(of: "{document_id}", with: documentIdPostEscape, options: .literal, range: nil)
+    open class func getSimilarDocumentsWithRequestBuilder(semanticSearchRequest: SemanticSearchRequest) -> RequestBuilder<SemanticSearchResponse> {
+        let localVariablePath = "/semantic_search"
         let localVariableURLString = XaynFrontOfficeSdkAPI.basePath + localVariablePath
-        let localVariableParameters: [String: Any]? = nil
+        let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: semanticSearchRequest)
 
-        var localVariableUrlComponents = URLComponents(string: localVariableURLString)
-        localVariableUrlComponents?.queryItems = APIHelper.mapValuesToQueryItems([
-            "count": (wrappedValue: count?.encodeToJSON(), isExplode: true),
-            "min_similarity": (wrappedValue: minSimilarity?.encodeToJSON(), isExplode: true),
-            "personalize_for": (wrappedValue: personalizeFor?.encodeToJSON(), isExplode: true),
-        ])
+        let localVariableUrlComponents = URLComponents(string: localVariableURLString)
 
         let localVariableNillableHeaders: [String: Any?] = [
             :
@@ -128,7 +114,7 @@ open class FrontOfficeAPI {
 
         let localVariableRequestBuilder: RequestBuilder<SemanticSearchResponse>.Type = XaynFrontOfficeSdkAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true)
+        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true)
     }
 
     /**
@@ -155,7 +141,7 @@ open class FrontOfficeAPI {
      - POST /personalized_documents
      - Returns a list of personalized documents based on interests derived from a history. In difference to `getPersonalizedDocuments` any user specific parts are based on the inputs only. Documents still need to be ingested beforehand.
      - API Key:
-       - type: apiKey authorizationToken 
+       - type: apiKey authorizationToken (HEADER)
        - name: ApiKeyAuth
      - parameter statelessPersonalizedDocumentsRequest: (body)  
      - returns: RequestBuilder<StatelessPersonalizedDocumentsResponse> 
@@ -203,7 +189,7 @@ open class FrontOfficeAPI {
      - PATCH /users/{user_id}/interactions
      - Use this method to register an interaction between a user and a document. Currently, we only support a `Positive` interaction, which is equivalent to a user who \"likes\" a certain document. For web sites, consider triggering this method whenever a certain document url loads, preferably after the user spent some time on the page, in order to prevent false positives. For apps, consider implementing a \"like\" button, where the on click then triggers this method.
      - API Key:
-       - type: apiKey authorizationToken 
+       - type: apiKey authorizationToken (HEADER)
        - name: ApiKeyAuth
      - parameter userId: (path) Id of the user 
      - parameter userInteractionRequest: (body)  
