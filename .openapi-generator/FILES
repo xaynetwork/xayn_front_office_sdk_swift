@@ -17,6 +17,7 @@ XaynFrontOfficeSdk/Classes/OpenAPIs/Models.swift
 XaynFrontOfficeSdk/Classes/OpenAPIs/Models/DocumentProperties.swift
 XaynFrontOfficeSdk/Classes/OpenAPIs/Models/GenericError.swift
 XaynFrontOfficeSdk/Classes/OpenAPIs/Models/HistoryEntry.swift
+XaynFrontOfficeSdk/Classes/OpenAPIs/Models/InputDocument.swift
 XaynFrontOfficeSdk/Classes/OpenAPIs/Models/InputUser.swift
 XaynFrontOfficeSdk/Classes/OpenAPIs/Models/PersonalizedDocumentData.swift
 XaynFrontOfficeSdk/Classes/OpenAPIs/Models/PersonalizedDocumentsError.swift
